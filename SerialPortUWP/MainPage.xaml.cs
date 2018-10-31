@@ -36,7 +36,7 @@ namespace SerialPortUWP
             
         private ObservableCollection<DeviceInformation> listOfDevices;      //Our device list
 
-        private CancellationToken readCancellationTokenSource;      //Cancelation Token
+        private CancellationTokenSource readCancellationTokenSource;      //Cancelation Token
 
 
         public MainPage()
@@ -52,7 +52,7 @@ namespace SerialPortUWP
         private async void ListAvailablePorts() {
             try {   //I love try catch
                 string aqs = SerialDevice.GetDeviceSelector();          
-                var dis = await DeviceInformation.FindAllAsync(aqs);    //get all the devices
+                var dis = await DeviceInformation.FindAllAsync(aqs);    //wait until done] get all the devices
 
                 for(int i = 0; i < dis.Count; i++) {        //This is a for loop
                     listOfDevices.Add(dis[i]);      //Add them to our list 1 by 1 (so we dont have to await to fetch it each time?)
@@ -67,7 +67,44 @@ namespace SerialPortUWP
             }
         }
 
+
+        //CONNECT TO DEVICE
+        //Click to initiate
         private void btnConnectToDevice_Click(object sender, RoutedEventArgs e) {
+            SerialPortConfiguration();
+        }
+        //Serial Config
+        private async void SerialPortConfiguration() {
+            var selection = lstSerialDevices.SelectedItems;
+            //Nothing selected
+            if (selection.Count <= 0) {
+                txtMessage.Text = "You forgot to pick a device";
+                return;
+            }
+            //Somthing selected
+            DeviceInformation entry = (DeviceInformation)selection[0]; //only use first selection
+
+            try {   //Try to set up the serial port to 8and1N configuration
+                serialPort = await SerialDevice.FromIdAsync(entry.Id);
+                serialPort.WriteTimeout = TimeSpan.FromMilliseconds(1000);  //how long to try before giving up
+                serialPort.ReadTimeout = TimeSpan.FromMilliseconds(1000);   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                serialPort.BaudRate = 115200;                   //baud rate, must match device
+                serialPort.Parity = SerialParity.None;          //n
+                serialPort.StopBits = SerialStopBitCount.One;   //and1
+                serialPort.DataBits = 8;                        //8
+                serialPort.Handshake = SerialHandshake.None;    //or is this n?
+                txtMessage.Text = "Serial port correctly configured!";      //Report success to user
+
+                readCancellationTokenSource = new CancellationTokenSource();        //cancellation token
+
+                Listen();   //begin listening
+            }
+            catch (Exception ex) {
+                txtMessage.Text = ex.Message;   //Shows your error // fitting?
+            }
+        }
+        //Listen
+        private async void Listen() {
 
         }
     }
