@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Threading.Tasks;   //fuck yeah tasks are cool
 using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
 using Windows.Foundation;
@@ -28,6 +28,17 @@ namespace SerialPortUWP
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        private SerialDevice serialPort = null;     //The port our device is on
+
+        DataWriter dataWriterObject = null;         //So we can write
+        DataReader dataReaderObject = null;         //So we can read
+            
+        private ObservableCollection<DeviceInformation> listOfDevices;      //Our device list
+
+        private CancellationToken readCancellationTokenSource;      //Cancelation Token
+
+
         public MainPage()
         {
             this.InitializeComponent();
