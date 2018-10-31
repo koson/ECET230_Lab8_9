@@ -125,7 +125,7 @@ namespace SerialPortUWP
         }
 
 
-        //Read Data
+        //Read Data] Runs continuously in a while(true) loop
         private async Task ReadData(CancellationToken cancellationToken) {
 
         }
