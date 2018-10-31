@@ -26,5 +26,9 @@ namespace SerialPortUWP
         {
             this.InitializeComponent();
         }
+
+        private void btnConnectToDevice_Click(object sender, RoutedEventArgs e) {
+
+        }
     }
 }
