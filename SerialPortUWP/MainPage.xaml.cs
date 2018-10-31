@@ -29,7 +29,7 @@ namespace SerialPortUWP
     public sealed partial class MainPage : Page
     {
 
-        private SerialDevice serialPort = null;     //The port our device is on
+        private SerialDevice serialPort = null;     //Our port/device
 
         DataWriter dataWriterObject = null;         //So we can write
         DataReader dataReaderObject = null;         //So we can read
@@ -42,6 +42,29 @@ namespace SerialPortUWP
         public MainPage()
         {
             this.InitializeComponent();
+
+            listOfDevices = new ObservableCollection<DeviceInformation>();  //Prepare our list
+
+            ListAvailablePorts();   //Get a port
+        }
+
+        //Get every connected device in a list
+        private async void ListAvailablePorts() {
+            try {   //I love try catch
+                string aqs = SerialDevice.GetDeviceSelector();          
+                var dis = await DeviceInformation.FindAllAsync(aqs);    //get all the devices
+
+                for(int i = 0; i < dis.Count; i++) {        //This is a for loop
+                    listOfDevices.Add(dis[i]);      //Add them to our list 1 by 1 (so we dont have to await to fetch it each time?)
+                }
+
+                lstSerialDevices.ItemsSource = listOfDevices; //Show list in XAML
+
+                lstSerialDevices.SelectedIndex = -1;
+            }
+            catch(Exception ex) {
+                txtMessage.Text = ex.Message;       //Dont message your ex, bad idea
+            }
         }
 
         private void btnConnectToDevice_Click(object sender, RoutedEventArgs e) {
