@@ -104,7 +104,29 @@ namespace SerialPortUWP
             }
         }
         //Listen
-        private async void Listen() {
+        private async void Listen() {//   !!while(true) inside!!
+            try {
+                if(serialPort != null) { //Ensure there's actually a device
+                    dataReaderObject = new DataReader(serialPort.InputStream); //get ready to read
+
+                    while (true) {
+                        await ReadData(readCancellationTokenSource.Token);
+                    }
+                }
+            }
+            catch(Exception ex) {
+                txtMessage.Text = ex.Message;
+
+                //if (ex.GetType.Name=="TaskCanelledExcption")      //Wayne left this here commented
+            }
+            finally {
+
+            }
+        }
+
+
+        //Read Data
+        private async Task ReadData(CancellationToken cancellationToken) {
 
         }
     }
