@@ -24,5 +24,9 @@
             </ListBox>
             <TextBlock x:Name="txtMessage" Text="Message" Margin="10,10,0,0"/>
         </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="200">
+            <TextBlock x:Name="txtReceived" Margin="10,10,0,0"
+                       Text="Data Received"/>
+        </ScrollViewer>
     </Grid>
 </Page>

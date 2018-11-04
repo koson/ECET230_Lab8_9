@@ -38,6 +38,8 @@ namespace SerialPortUWP
 
         private CancellationTokenSource readCancellationTokenSource;      //Cancelation Token
 
+        string received = "";
+
 
         public MainPage()
         {
@@ -127,7 +129,24 @@ namespace SerialPortUWP
 
         //Read Data] Runs continuously in a while(true) loop
         private async Task ReadData(CancellationToken cancellationToken) {
+            Task<UInt32> loadAsyncTask;
 
+            int calChkSum = 0;
+
+            uint ReadBufferLength = 1;
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            dataReaderObject.InputStreamOptions = InputStreamOptions.Partial;
+
+            loadAsyncTask = dataReaderObject.LoadAsync(ReadBufferLength).AsTask(cancellationToken);
+
+            UInt32 bytesRead = await loadAsyncTask;
+
+            if (bytesRead > 0) {
+                received += dataReaderObject.ReadString(bytesRead);
+                txtReceived.Text = received + txtReceived.Text;
+            }
         }
     }
 }
