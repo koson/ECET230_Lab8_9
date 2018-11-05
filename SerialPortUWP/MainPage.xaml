@@ -13,6 +13,8 @@
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <Button x:Name="btnConnectToDevice" Content="Connect to Device"
                     Margin="0,0,10,0" Click="btnConnectToDevice_Click"/>
+                <Button x:Name="btnWrite" Content="Write" Margin="10,10,0,0"
+                        Click="btnWrite_Click"/>
             </StackPanel>
             <TextBlock Text="Select yo Serial Device:"/>
             <ListBox x:Name="lstSerialDevices" Height="100">
@@ -23,10 +25,13 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <TextBlock x:Name="txtMessage" Text="Message" Margin="10,10,0,0"/>
-        </StackPanel>
+        
         <ScrollViewer VerticalScrollBarVisibility="Auto" Height="200">
             <TextBlock x:Name="txtReceived" Margin="10,10,0,0"
                        Text="Data Received"/>
         </ScrollViewer>
+        <TextBox x:Name="txtSend" Margin="10,10,0,0"
+                   Text="###010000289\r\n"/> <!-- Preformated value-->
+        </StackPanel>
     </Grid>
 </Page>

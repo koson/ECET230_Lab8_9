@@ -152,10 +152,12 @@ namespace SerialPortUWP
                         if(received[2] == '#') {        //Is it still following protocol?
                             if (received.Length > 42) {     //Full length?
                                 txtReceived.Text = received + txtReceived.Text;
+                                //Parsing code
+
+
+                                received = "";//Clear the buffer for the next pass
                             }
-
                             
-
                         }
                         else {                          //It's not yo
                             received = "";
@@ -165,6 +167,42 @@ namespace SerialPortUWP
                 else {                    //Otherwise clear the buffer
                     received = "";
                 }
+            }
+        }
+
+
+
+        //Send Data]
+        private async void btnWrite_Click(object sender, RoutedEventArgs e) {
+            if(serialPort != null) {    //dont send if nothing to send to
+                var dataPacket = txtSend.Text.ToString();
+                dataWriterObject = new DataWriter(serialPort.OutputStream);
+                await SendPacket(dataPacket);
+
+                if (dataWriterObject != null) {     //Clear the datawriter
+                    dataWriterObject.DetachStream();
+                    dataWriterObject = null;
+                }
+            }
+        }
+
+        private async Task SendPacket(string value) {
+            var dataPacket = value;
+
+            Task<UInt32> storeAsyncTask;
+
+            if (dataPacket.Length != 0) {
+                dataWriterObject.WriteString(dataPacket);
+
+                storeAsyncTask = dataWriterObject.StoreAsync().AsTask();
+
+                UInt32 bytesWritten = await storeAsyncTask;
+                if(bytesWritten > 0) {
+                    txtMessage.Text = "Value sent correctly";
+                }
+            }
+            else {
+                txtMessage.Text = "No value sent yo";
             }
         }
     }
