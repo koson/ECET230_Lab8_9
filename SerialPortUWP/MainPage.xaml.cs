@@ -152,14 +152,23 @@ namespace SerialPortUWP
                         if(received[2] == '#') {        //Is it still following protocol?
                             if (received.Length > 42) {     //Full length?
                                 txtReceived.Text = received + txtReceived.Text;
-                                //Parsing code
-                                /* 1/Packet Number
-                                 * 2/A0 to A5
-                                 * 3/Binary Values
-                                 * 4/Input Values
-                                 * 5/Check Sum */
+                                ////////////////   ### is being matched on the arduino, both sides expect this key
+                                //Parsing code//   ###,packetId,A0,A1,A2,A3,A4,A5
+                                ////////////////                                
+                                txtPacketNum.Text = received.Substring(3, 3);   // 3 is where packet num start and it is 3 long] 0,1,2 are ###
+                                txtAN0.Text = received.Substring(6, 4);         //Start at 6, 4 long] Analog 0
+                                txtAN1.Text = received.Substring(10, 4);        //Start at 10, 4 long] Analog 0
+                                txtAN2.Text = received.Substring(14, 4);        //Start at 14, 4 long] Analog 0
+                                txtAN3.Text = received.Substring(18, 4);        //Start at 18, 4 long] Analog 0
+                                txtAN4.Text = received.Substring(22, 4);        //Start at 22, 4 long] Analog 0
+                                txtAN5.Text = received.Substring(26, 4);        //Start at 26, 4 long] Analog 0
+                                txtBinOut.Text = received.Substring(30, 8);     //8 bit binary inputs
+                                txtChkSum.Text = received.Substring(38, 3);     //Check Sum
 
-
+                                for (int i = 3; i < 38; i++) {
+                                    calChkSum += (byte)received[i];
+                                }
+                                txtCalChkSum.Text = Convert.ToString(calChkSum);
 
                                 received = "";//Clear the buffer for the next pass
                             }
