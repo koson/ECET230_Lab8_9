@@ -153,6 +153,12 @@ namespace SerialPortUWP
                             if (received.Length > 42) {     //Full length?
                                 txtReceived.Text = received + txtReceived.Text;
                                 //Parsing code
+                                /* 1/Packet Number
+                                 * 2/A0 to A5
+                                 * 3/Binary Values
+                                 * 4/Input Values
+                                 * 5/Check Sum */
+
 
 
                                 received = "";//Clear the buffer for the next pass
