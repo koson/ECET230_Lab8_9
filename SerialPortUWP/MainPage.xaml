@@ -38,12 +38,24 @@
                 <TextBlock x:Name="txtCalChkSum" Text="Calculate ChkSum" Margin="10,10,0,0"/>
             </StackPanel>
             
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="200">
-            <TextBlock x:Name="txtReceived" Margin="10,10,0,0"
-                       Text="Data Received"/>
-        </ScrollViewer>
-        <TextBox x:Name="txtSend" Margin="10,10,0,0"
-                   Text="###010000289\r\n"/> <!-- Preformated value-->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="200">
+                <TextBlock x:Name="txtReceived" Margin="10,10,0,0"
+                           Text="Data Received"/>
+            </ScrollViewer>
+            <TextBox x:Name="txtSend" Margin="10,10,0,0"
+                Text="###010000289\r\n"/> <!-- Preformated value-->
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                <TextBlock x:Name="txtSolarVoltTitle" Text="V Solar]" Margin="20,10,0,0"/>
+                <TextBlock x:Name="txtSolarVolt" Text="0.0" Margin="10,10,0,0"/>
+                <TextBlock x:Name="txtBatteryVoltTitle" Text="V Bat]" Margin="20,10,0,0"/>
+                <TextBlock x:Name="txtBatteryVolt" Text="0.0" Margin="10,10,0,0"/>
+                <TextBlock x:Name="txtBatterCurrentTitle" Text="I Bat]" Margin="20,10,0,0"/>
+                <TextBlock x:Name="txtBatteryCurrent" Text="0.0" Margin="10,10,0,0"/>
+                <TextBlock x:Name="txtLed1CurrentTitle" Text="I LED1]" Margin="20,10,0,0"/>
+                <TextBlock x:Name="txtLed1Current" Text="0.0" Margin="10,10,0,0"/>
+                <TextBlock x:Name="txtLed2CurrentTitle" Text="I Led2]" Margin="20,10,0,0"/>
+                <TextBlock x:Name="txtLed2Current" Text="0.0" Margin="10,10,0,0"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>
