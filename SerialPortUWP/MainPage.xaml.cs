@@ -30,6 +30,7 @@ namespace SerialPortUWP
     {
 
         private SerialDevice serialPort = null;     //Our port/device
+        private SolarCalc solarCalc = new SolarCalc();
 
         DataWriter dataWriterObject = null;         //So we can write
         DataReader dataReaderObject = null;         //So we can read
@@ -39,6 +40,13 @@ namespace SerialPortUWP
         private CancellationTokenSource readCancellationTokenSource;      //Cancelation Token
 
         string received = "";
+        private Int32 an0;
+        private Int32 an1;
+        private Int32 an2;
+        private Int32 an3;
+        private Int32 an4;
+        private Int32 an5;
+        private Int32 recChkSum;
 
 
         public MainPage()
@@ -151,6 +159,8 @@ namespace SerialPortUWP
                     if (received.Length > 3) {      //Is it a complete packet
                         if(received[2] == '#') {        //Is it still following protocol?
                             if (received.Length > 42) {     //Full length?
+
+                                #region Display Raw Data
                                 txtReceived.Text = received + txtReceived.Text;
                                 ////////////////   ### is being matched on the arduino, both sides expect this key
                                 //Parsing code//   ###,packetId,A0,A1,A2,A3,A4,A5
@@ -164,12 +174,37 @@ namespace SerialPortUWP
                                 txtAN5.Text = received.Substring(26, 4);        //Start at 26, 4 long] Analog 0
                                 txtBinOut.Text = received.Substring(30, 8);     //8 bit binary inputs
                                 txtChkSum.Text = received.Substring(38, 3);     //Check Sum
+                                #endregion
+                                
 
+                                #region Calculate the Check Sum and prepare to compare
                                 for (int i = 3; i < 38; i++) {
                                     calChkSum += (byte)received[i];
                                 }
                                 txtCalChkSum.Text = Convert.ToString(calChkSum);
+                                
+                                recChkSum = Convert.ToInt32(received.Substring(38, 3));
+                                calChkSum %= 1000;
+                                #endregion
+                                #region Packet is Legit
+                                if (recChkSum == calChkSum) {
+                                    //Start Reading packet
+                                    #region Get Analog Values
+                                    an0 = Convert.ToInt32(received.Substring(6, 4));    //Solar Voltage
+                                    an1 = Convert.ToInt32(received.Substring(10, 4));   //Reference V for Current
+                                    an2 = Convert.ToInt32(received.Substring(14, 4));   //Battery Voltage
+                                    an3 = Convert.ToInt32(received.Substring(18, 4));   //Led1?
+                                    an4 = Convert.ToInt32(received.Substring(22, 4));   //Led2?
+                                    an5 = Convert.ToInt32(received.Substring(26, 4));
+                                    #endregion
 
+                                    txtSolarVolt.Text = solarCalc.GetSolarVoltage(an0);
+                                    txtBatteryVolt.Text = solarCalc.GetBatteryVoltage(an2);
+                                    txtBatteryCurrent.Text = solarCalc.GetBatteryCurrent(an1, an2);
+                                    txtLed1Current.Text = solarCalc.GetLedCurrent(an3, an1);
+                                    txtLed2Current.Text = solarCalc.GetLedCurrent(an4, an1);
+                                }
+                                #endregion
                                 received = "";//Clear the buffer for the next pass
                             }
                             
