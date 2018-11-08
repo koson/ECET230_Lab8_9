@@ -24,7 +24,7 @@ namespace SerialPortUWP
 
 
 
-        //Methods
+        #region Methods
         public string GetSolarVoltage(int an0) {
             double dAn0 = an0 * vRef / 1024.0;
             return dAn0.ToString("0.0000");
@@ -43,11 +43,12 @@ namespace SerialPortUWP
         }
 
         public string GetLedCurrent(int ledAnalog, int an1) {
-            int shuntAnalog = an1 - ledAnalog;
-            double shuntVoltage = shuntAnalog * vRef / 1024.0;
-            double dLedCurrent = shuntVoltage / resistorValue;
-            if (dLedCurrent < 0.0001) dLedCurrent = 0;
-            return dLedCurrent.ToString("0.000000");
+            int shuntAnalog = an1 - ledAnalog;                      //Voltage drop to calculate current
+            double shuntVoltage = shuntAnalog * vRef / 1024.0;      //Turn from analog to Volts
+            double dLedCurrent = shuntVoltage / resistorValue;      //Calculate the current V/R
+            if (dLedCurrent < 0.0001) dLedCurrent = 0;              //LED will not run lower than this, so 0
+            return dLedCurrent.ToString("0.000000");                //format and display] limits dp
         }
+        #endregion
     }
 }

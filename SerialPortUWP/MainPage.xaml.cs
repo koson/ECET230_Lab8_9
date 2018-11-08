@@ -193,12 +193,12 @@ namespace SerialPortUWP
                                     an0 = Convert.ToInt32(received.Substring(6, 4));    //Solar Voltage
                                     an1 = Convert.ToInt32(received.Substring(10, 4));   //Reference V for Current
                                     an2 = Convert.ToInt32(received.Substring(14, 4));   //Battery Voltage
-                                    an3 = Convert.ToInt32(received.Substring(18, 4));   //Led1?
-                                    an4 = Convert.ToInt32(received.Substring(22, 4));   //Led2?
+                                    an3 = Convert.ToInt32(received.Substring(18, 4));   //Led1
+                                    an4 = Convert.ToInt32(received.Substring(22, 4));   //Led2
                                     an5 = Convert.ToInt32(received.Substring(26, 4));
                                     #endregion
 
-                                    txtSolarVolt.Text = solarCalc.GetSolarVoltage(an0);
+                                    txtSolarVolt.Text = solarCalc.GetSolarVoltage(an0);             //evoke solar calc classes to do our math
                                     txtBatteryVolt.Text = solarCalc.GetBatteryVoltage(an2);
                                     txtBatteryCurrent.Text = solarCalc.GetBatteryCurrent(an1, an2);
                                     txtLed1Current.Text = solarCalc.GetLedCurrent(an3, an1);
