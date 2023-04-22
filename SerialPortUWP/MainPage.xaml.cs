@@ -153,9 +153,9 @@ namespace SerialPortUWP
 
             if (bytesRead > 0) {
                 received += dataReaderObject.ReadString(bytesRead);
-                //txtReceived.Text = received + txtReceived.Text;
-
-                if(received[0] == '#') {    //checking the packet follows protocol    ###
+               txtReceived.Text = received + txtReceived.Text;
+ 
+                if (received[0] == '#') {    //checking the packet follows protocol    ###
                     if (received.Length > 3) {      //Is it a complete packet
                         if(received[2] == '#') {        //Is it still following protocol?
                             if (received.Length > 42) {     //Full length?
